@@ -1,7 +1,8 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.dao.MockData;
+import ru.javawebinar.topjava.dao.MealsDao;
+import ru.javawebinar.topjava.dao.MockDao;
 import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -25,7 +26,7 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
         mealWithExceeds = MealsUtil.getFilteredWithExceeded(
-                MockData.getInstance().getMeals(),
+                new MealsDao().getAll(),
                 LocalTime.MIN,
                 LocalTime.MAX,
                 2000);
