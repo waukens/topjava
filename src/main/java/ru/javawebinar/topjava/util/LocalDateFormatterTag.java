@@ -27,7 +27,7 @@ public class LocalDateFormatterTag extends SimpleTagSupport {
     public void doTag() throws JspException, IOException {
         try {
             String formattedDate = localDateTime.format(DateTimeFormatter.ofPattern(pattern));
-            getJspContext().getOut().println(formattedDate);
+            getJspContext().getOut().write(formattedDate);
         } catch (Exception e) {
             e.printStackTrace();
             throw new SkipPageException("Exception in date " + localDateTime +
