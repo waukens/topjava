@@ -25,36 +25,47 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
     private MockDao mealsDao = new MealsDao();
-    List<MealWithExceed> mealWithExceeds;
-
-
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        Meal meal = new Meal(
+                id == null ? null : Integer.parseInt(id),
+                LocalDateTime.parse(req.getParameter("dateTime")),
+                req.getParameter("description"),
+                Integer.parseInt(req.getParameter("calories"))
+        );
+        mealsDao.add(meal);
+        log.info("meal with {} {} successful", id, req.getParameter("action"));
+        resp.sendRedirect("/meals.jsp");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
 
         switch (action == null ? "all" : action) {
             case("delete") :
-                String id = request.getParameter("id");
+                String id = req.getParameter("id");
                 log.info("Delete {}" , id);
-                mealsDao.delete(getId(request));
-                response.sendRedirect("/meals.jsp");
+                mealsDao.delete(getId(req));
+                resp.sendRedirect("/meals.jsp");
                 break;
             case ("create"):
             case ("update"):
                 final Meal meal = action.equals("create") ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        mealsDao.get(getId(request));
-                request.setAttribute("meal", meal);
-                log.info("redirect to {} meals", action);
-                request.getRequestDispatcher("/mealsupdate.jsp").forward(request, response);
+                        mealsDao.get(getId(req));
+                req.setAttribute("meal", meal);
+                log.info("redirect to {} meals form", action);
+                req.getRequestDispatcher("/mealsForm.jsp").forward(req, resp);
                 break;
             case ("all"):
             default:
                 log.info("show all");
-                request.setAttribute("sortedMeals", MealsUtil.getAllMealWithExceeded(mealsDao.getAll(),
+                req.setAttribute("sortedMeals", MealsUtil.getAllMealWithExceeded(mealsDao.getAll(),
                         MealsUtil.DEFAULT_CALORIES_PER_DAY));
-                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                req.getRequestDispatcher("/meals.jsp").forward(req, resp);
                 break;
         }
     }
