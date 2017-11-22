@@ -28,6 +28,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String id = req.getParameter("id");
         Meal meal = new Meal(
                 id == null ? null : Integer.parseInt(id),
@@ -37,11 +38,12 @@ public class MealServlet extends HttpServlet {
         );
         mealsDao.add(meal);
         log.info("meal with {} {} successful", id, req.getParameter("action"));
-        resp.sendRedirect("/meals.jsp");
+        resp.sendRedirect("mealsServlet");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
         String action = req.getParameter("action");
 
         switch (action == null ? "all" : action) {
@@ -49,7 +51,7 @@ public class MealServlet extends HttpServlet {
                 String id = req.getParameter("id");
                 log.info("Delete {}" , id);
                 mealsDao.delete(getId(req));
-                resp.sendRedirect("/meals.jsp");
+                resp.sendRedirect("mealsServlet");
                 break;
             case ("create"):
             case ("update"):
@@ -58,7 +60,7 @@ public class MealServlet extends HttpServlet {
                         mealsDao.get(getId(req));
                 req.setAttribute("meal", meal);
                 log.info("redirect to {} meals form", action);
-                req.getRequestDispatcher("/mealsForm.jsp").forward(req, resp);
+                req.getRequestDispatcher("/mealsform.jsp").forward(req, resp);
                 break;
             case ("all"):
             default:
