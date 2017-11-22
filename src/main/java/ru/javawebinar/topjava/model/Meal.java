@@ -25,9 +25,9 @@ public class Meal {
         this.description = description;
         this.calories = calories;
     }
-    public void setId(int id) {this.id = id;}
+    public void setId(Integer id) {this.id = id;}
 
-    public int getId() {return id;}
+    public Integer getId() {return id;}
 
     public LocalDateTime getDateTime() {
         return dateTime;

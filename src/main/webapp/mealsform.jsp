@@ -12,14 +12,14 @@
     <hr>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="POST" action="mealsServlet">
-        <input type="hiddenl" name="id" value="${meal.id}">
+        <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt>DateTime:</dt>
             <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime"></dd>
         </dl>
         <dl>
             <dt>Description:</dt>
-            <dd><input type="text" value="${meal.description}" size=40 name="description"></dd>
+            <dd><input type="text" value="${meal.description}" name="description"></dd>
         </dl>
         <dl>
             <dt>Calories:</dt>

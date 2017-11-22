@@ -13,11 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -31,7 +28,7 @@ public class MealServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String id = req.getParameter("id");
         Meal meal = new Meal(
-                id == null ? null : Integer.parseInt(id),
+                id.isEmpty() ? null : Integer.parseInt(id),
                 LocalDateTime.parse(req.getParameter("dateTime")),
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("calories"))
