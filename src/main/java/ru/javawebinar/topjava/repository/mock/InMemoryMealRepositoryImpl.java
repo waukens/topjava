@@ -8,7 +8,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.AuthorizedUser;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +27,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal) {
+        log.info("save meal {}", meal.getDescription());
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(AuthorizedUser.id());
@@ -57,7 +58,8 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll() {
+    public List<Meal> getAll() {
+        log.info("get all meals");
         return repository
                 .values()
                 .stream()
