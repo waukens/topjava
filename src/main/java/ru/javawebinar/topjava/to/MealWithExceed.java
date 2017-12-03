@@ -2,7 +2,7 @@ package ru.javawebinar.topjava.to;
 
 import java.time.LocalDateTime;
 
-public class MealWithExceed {
+public class  MealWithExceed {
     private final Integer id;
 
     private final LocalDateTime dateTime;
