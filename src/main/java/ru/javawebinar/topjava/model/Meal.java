@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class Meal extends AbstractBaseEntity {
     private LocalDateTime dateTime;
@@ -26,7 +27,7 @@ public class Meal extends AbstractBaseEntity {
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return dateTime.truncatedTo(ChronoUnit.MINUTES);
     }
 
     public String getDescription() {
