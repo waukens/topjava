@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,7 +36,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        MapSqlParameterSource map = new MapSqlParameterSource()
+            MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("date_time", meal.getDateTime())
                 .addValue("description", meal.getDescription())
@@ -45,10 +46,14 @@ public class JdbcMealRepositoryImpl implements MealRepository {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else {
-            namedParameterJdbcTemplate.update(
-                    "UPDATE meals SET date_time=:date_time, " +
-                            "description=:description, calories=:calories WHERE id=:id", map
-            );
+            try {
+                namedParameterJdbcTemplate.update(
+                        "UPDATE meals SET date_time=:date_time, " +
+                                "description=:description, calories=:calories WHERE (id=:id AND user_id=:user_id)", map
+                );
+            } catch (DataAccessException e) {
+                return null;
+            }
         }
         return meal;
     }
