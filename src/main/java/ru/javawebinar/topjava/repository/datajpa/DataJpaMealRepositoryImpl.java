@@ -21,12 +21,13 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return false;
+        return crudRepository.delete(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+        Meal meal = crudRepository.getOne(id);
+        return meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
