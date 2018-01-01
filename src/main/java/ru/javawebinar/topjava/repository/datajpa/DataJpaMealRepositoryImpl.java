@@ -14,11 +14,15 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     @Autowired
     private CrudMealRepository crudRepository;
 
+    @Autowired
+    private CrudUserRepository crudUserRepository;
+
     @Override
     public Meal save(Meal meal, int userId) {
-        if (!meal.isNew() && crudRepository.getOne(meal.getId()).getUser().getId() != userId) {
+        if (!meal.isNew() && crudRepository.getOne(meal.getId(), userId) == null) {
             return null;
         }
+        meal.setUser(crudUserRepository.getOne(userId));
         return crudRepository.save(meal);
     }
 
@@ -29,13 +33,12 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = crudRepository.getOne(id);
-        return meal.getUser().getId() == userId ? meal : null;
+        return crudRepository.getOne(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return null;
+        return crudRepository.findAll(userId);
     }
 
     @Override
